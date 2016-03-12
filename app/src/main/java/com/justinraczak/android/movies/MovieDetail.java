@@ -3,11 +3,15 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import java.io.File;
 
 public class MovieDetail extends Activity {
 
@@ -21,10 +25,16 @@ public class MovieDetail extends Activity {
             //imageView.setImageResource(getIntent().getStringExtra("image_id"));
 
             Bundle extras = getIntent().getExtras();
-            byte[] b = extras.getByteArray("poster_image");
+            String fileName = extras.getString("poster_image_filename");
+            //byte[] b = extras.getByteArray("poster_image_bytes");
 
-            Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-            imageView.setImageBitmap(bmp);
+            File filePath = getFileStreamPath(fileName);
+            Drawable drawable = Drawable.createFromPath(filePath.toString());
+
+            //Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
+            //ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(imageView, "2dp", "3dp");
+            imageView.setBackground(drawable);
+            //imageView.setLayoutParams();
         }
     }
 

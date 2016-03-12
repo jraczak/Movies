@@ -56,36 +56,21 @@ public class ImageAdapter extends BaseAdapter {
             imageView = new ImageView(mContext);
             //imageView.setLayoutParams(new GridView.LayoutParams(320, 320));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            //imageView.setPadding(8, 8, 8, 8);
+            imageView.setAdjustViewBounds(true);
         }
         else {
             imageView = (ImageView) convertView;
         }
-
-        //UrlImageLoader imageLoader = new UrlImageLoader();
-        //imageLoader.execute(imageView, url);
         Log.d("getView", "Url set length is " + this.mImageUrls.size());
-        for (int i=0; i<this.mImageUrls.size(); i++) {
-            String url = this.mImageUrls.get(i);
-            Log.d("getView", "Sending image at " + url + "to loader");
-            new UrlImageLoader(url, imageView).execute();
-        }
+
+        String url = this.mImageUrls.get(position);
+        Log.d("getView", "Sending image at " + url + "to loader");
+        new UrlImageLoader(url, imageView).execute();
+
         return imageView;
         }
 
-
-    // references to the images
-    //private Integer[] mThumbIds = {
-     //       R.drawable.imgres,
-     //       R.drawable.imgres1,
-     //       R.drawable.imgres2,
-     //       R.drawable.imgres3,
-     //       R.drawable.imgres4,
-     //      R.drawable.imgres5,
-     //       R.drawable.imgres6,
-     //       R.drawable.imgres7
-    //};
-    //private ArrayList<String> mAllUrls = mImageUrls;
 
     public class ImageContainer {
         public ImageView view;
@@ -105,12 +90,9 @@ public class ImageAdapter extends BaseAdapter {
         @Override
         protected ImageContainer doInBackground(Void... params) {
 
-            //mImageUrls.add("http://hawaii.kauai.com/images/guide-to-kauai.jpg");
             Log.d("ImageBackground", imageUrl + " has reached background task");
 
             try {
-                //URL url = new URL(mImageUrls.get(0));
-                //URL url = new URL("http://hawaii.kauai.com/images/guide-to-kauai.jpg");
                 URL url = new URL(imageUrl);
                 URLConnection connection = url.openConnection();
                 InputStream inputStream = connection.getInputStream();

@@ -11,6 +11,7 @@
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="20dp"
         android:columnWidth="120dp"
         android:numColumns="2"
         android:verticalSpacing="10dp"
