@@ -3,12 +3,11 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,64 +30,66 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends Activity {
 
     private ImageAdapter mImageAdapter;
-    private ArrayList<String> urlList;
+    private ArrayList<Movie> moviesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        urlList = new ArrayList<>();
-        //urls.addAll("I WILL BE A COLLECTION")//
-        //urls.add("http://hawaii.kauai.com/images/guide-to-kauai.jpg");
-        //urls.add("http://www.eventscr.com/wp-content/uploads/2011/01/arenal-volcano-daytime.jpg");
-        //urls.add("http://www.hawaiilife.com/articles/wp-content/uploads/2012/10/kauai.jpg");
-        //urls.add("http://www.kauailandmark.com/images/kauai_beach_scene_488_01.jpg");
-        //urls.add("http://adventureinhawaii.com/site/wp-content/uploads/2014/03/waialeale-crater.jpg");
-        //urls.add("https://luckywelive808.com/wp-content/uploads/2015/02/kauai-beaches.jpg");
-        // Instantiate an ImageAdapter and pass it the context, number of URLs, and array of URLs
+        moviesList = new ArrayList<>();
 
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
         fetchMoviesTask.execute();
 
+        Log.d("onCreate", "ArrayList size is " + moviesList.size());
 
-
-        mImageAdapter = new ImageAdapter(this, urlList.size(), urlList);
+        // Instantiate an ImageAdapter and pass it the context, number of movies, and array of movie objects
+        mImageAdapter = new ImageAdapter(this, moviesList.size(), moviesList);
         // Grab the GridView for displaying the images
         GridView gridView = (GridView) findViewById(R.id.gridview);
         // Attach the ImageAdapter to the GridView
+        Log.d("onCreate", "Setting the adapter on the grid view");
         gridView.setAdapter(mImageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //TODO: Copy this image compression code out to a snippet
                 // Grab the image that's displayed in the selected ImageView
-                Bitmap image = ((BitmapDrawable)((ImageView) view).getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                //    Bitmap image = ((BitmapDrawable)((ImageView) view).getDrawable()).getBitmap();
+                //    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 // Compress the image and pass the bytes into the output stream
-                image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                //    image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 // Pass the compressed bytes into a byte array
-                byte[] b = byteArrayOutputStream.toByteArray();
+                //    byte[] b = byteArrayOutputStream.toByteArray();
 
                 // Save the image to file so there isn't a large image in the Intent
-                String fileName = "image" + position;
-                try {
-                    FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_PRIVATE);
-                    fileOutputStream.write(b);
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //    String fileName = "image" + position;
+                //    try {
+                //        FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_PRIVATE);
+                //        fileOutputStream.write(b);
+                //        fileOutputStream.close();
+                //    } catch (IOException e) {
+                //        e.printStackTrace();
+                //    }
 
                 // Send the byte array to the MovieDetail activity to be uncompressed
+                //    Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
+                //    intent.putExtra("poster_image_filename", fileName);
+                //    startActivity(intent);
+
+                //TODO: Remove this toast
+                Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
+
+                Movie m = (Movie) mImageAdapter.getItem(position);
                 Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
-                intent.putExtra("poster_image_filename", fileName);
+                intent.putExtra("movie", m);
                 startActivity(intent);
             }
         });
@@ -117,12 +118,12 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchMoviesTask extends AsyncTask<Void, Void, String[]> {
+    public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
         // Manipulate the retrieved JSON to traverse objects and pull poster URLs
-        private String[] getMovieDataFromJson(String moviesJsonString, int numberOfPages)
+        private ArrayList<Movie> getMovieDataFromJson(String moviesJsonString, int numberOfPages)
             throws JSONException {
 
             // List of JSON leaf nodes that need to be pulled from the result
@@ -130,6 +131,9 @@ public class MainActivity extends Activity {
             final String TMD_POSTER_PATH = "poster_path";
             final String TMD_ID = "id";
             final String TMD_TITLE = "title";
+            final String TMD_SYNOPSIS = "overview";
+            final String TMD_RELEASE_DATE = "release_date";
+            final String TMD_VOTE_AVERAGE = "vote_average";
 
             // Parameter values to construct the poster url
             String IMAGE_SIZE = "w185";
@@ -140,31 +144,53 @@ public class MainActivity extends Activity {
             // Convert the results object into a searchable JSONArray
             JSONArray moviesArray = moviesJson.getJSONArray(TMD_RESULTS);
 
-            String[] posterUrlStrings = new String[moviesArray.length()];
+            //TODO: Is this string array still necessary when using objects?
+            //String[] posterUrlStrings = new String[moviesArray.length()];
+
+            // An ArrayList to hold the movie objects
+            ArrayList<Movie> moviesArrayList = new ArrayList<>();
 
             for (int i=0; i < moviesArray.length(); i++) {
-                String posterUrl;
 
+                //TODO: Review the old loop after moving to objects
+                //String posterUrl;
+
+                //JSONObject movieObject = moviesArray.getJSONObject(i);
+
+                //posterUrl = BASE_URL + IMAGE_SIZE + "/" + movieObject.getString(TMD_POSTER_PATH);
+
+                //posterUrlStrings[i] = posterUrl;
+
+                // New loop using Movie objects instead of a string array
                 JSONObject movieObject = moviesArray.getJSONObject(i);
+                int id = movieObject.getInt(TMD_ID);
+                String title = movieObject.getString(TMD_TITLE);
+                String synopsis = movieObject.getString(TMD_SYNOPSIS);
+                String releaseDate = movieObject.getString(TMD_RELEASE_DATE);
+                String voteAverage = movieObject.getString(TMD_VOTE_AVERAGE);
+                String posterUrl = BASE_URL + IMAGE_SIZE + "/" + movieObject.getString(TMD_POSTER_PATH);
 
-                posterUrl = BASE_URL + IMAGE_SIZE + "/" + movieObject.getString(TMD_POSTER_PATH);
+                Movie movie = new Movie(id, title, releaseDate, synopsis, voteAverage, posterUrl);
 
-                posterUrlStrings[i] = posterUrl;
+                moviesArrayList.add(movie);
             }
 
-            for (String s: posterUrlStrings) {
-                Log.d(LOG_TAG, "Poster URL: " + s);
+            //for (String s: posterUrlStrings) {
+            for (Movie m: moviesArrayList) {
+                Log.d(LOG_TAG, "Built movie: " + m.title);
             }
-            return posterUrlStrings;
+            //TODO: Remove this old return statement
+            //return posterUrlStrings;
+            return moviesArrayList;
         }
 
         @Override
-        protected String[] doInBackground(Void... params) {
+        protected ArrayList doInBackground(Void... params) {
 
             HttpURLConnection urlConnection = null;
             BufferedReader bufferedReader = null;
             String moviesJsonString = null;
-            int numberofPages = 1;
+            int numberOfPages = 1;
 
             try {
                 final String API_URL = "https://api.themoviedb.org/3/movie/popular?";
@@ -173,7 +199,7 @@ public class MainActivity extends Activity {
 
 
                 Uri builtUri = Uri.parse(API_URL).buildUpon()
-                        .appendQueryParameter(PAGE_PARAM, Integer.toString(numberofPages))
+                        .appendQueryParameter(PAGE_PARAM, Integer.toString(numberOfPages))
                         .appendQueryParameter(API_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY)
                         .build();
 
@@ -218,7 +244,7 @@ public class MainActivity extends Activity {
                 }
             }
             try {
-                return getMovieDataFromJson(moviesJsonString, numberofPages);
+                return getMovieDataFromJson(moviesJsonString, numberOfPages);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -227,11 +253,17 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String[] result) {
+        protected void onPostExecute(ArrayList<Movie> result) {
             //super.onPostExecute(aVoid);
             if (result != null) {
-                urlList.clear();
-                urlList.addAll(Arrays.asList(result));
+                moviesList.clear();
+
+                Log.d(LOG_TAG, "Pushing results to moviesList array list");
+                for (Movie m: result) {
+                    moviesList.add(m);
+                }
+
+                Log.d(LOG_TAG, "Notifying adapter data set has changed");
                 mImageAdapter.notifyDataSetChanged();
             }
         }

@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -22,19 +25,31 @@ public class MovieDetail extends Activity {
 
         if (this.getIntent() != null) {
             ImageView imageView = (ImageView) findViewById(R.id.movie_poster_image);
-            //imageView.setImageResource(getIntent().getStringExtra("image_id"));
 
-            Bundle extras = getIntent().getExtras();
-            String fileName = extras.getString("poster_image_filename");
-            //byte[] b = extras.getByteArray("poster_image_bytes");
 
-            File filePath = getFileStreamPath(fileName);
-            Drawable drawable = Drawable.createFromPath(filePath.toString());
+        //    Bundle extras = getIntent().getExtras();
+        //    String fileName = extras.getString("poster_image_filename");
 
-            //Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-            //ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(imageView, "2dp", "3dp");
-            imageView.setBackground(drawable);
-            //imageView.setLayoutParams();
+
+        //    File filePath = getFileStreamPath(fileName);
+        //    Drawable drawable = Drawable.createFromPath(filePath.toString());
+
+
+        //    imageView.setBackground(drawable);
+
+            Movie movie = (Movie) getIntent().getParcelableExtra("movie");
+
+            imageView.setAdjustViewBounds(true);
+            Picasso.with(this).load(movie.posterUrl).resize(185, 278).into(imageView);
+
+            TextView titleTextView = (TextView) findViewById(R.id.movie_title);
+            TextView releaseDateTextView = (TextView) findViewById(R.id.movie_release_date);
+            TextView synopsisTextView = (TextView) findViewById(R.id.movie_synopsis);
+
+            titleTextView.setText(movie.title);
+            releaseDateTextView.setText(movie.releaseDate);
+            synopsisTextView.setText(movie.synopsis);
+
         }
     }
 

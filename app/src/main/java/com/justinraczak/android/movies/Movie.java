@@ -12,13 +12,15 @@ import java.util.ArrayList;
  */
 public class Movie implements Parcelable {
 
+    int id;
     String title;
     String releaseDate;
     String synopsis;
     String voteAverage;
     String posterUrl;
 
-    public Movie(String title, String releaseDate, String synopsis, String voteAverage, String posterUrl) {
+    public Movie(int id, String title, String releaseDate, String synopsis, String voteAverage, String posterUrl) {
+        this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
         this.synopsis = synopsis;
@@ -31,6 +33,7 @@ public class Movie implements Parcelable {
     }
 
     private Movie(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         releaseDate = in.readString();
         synopsis = in.readString();
@@ -45,6 +48,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(title);
         parcel.writeString(releaseDate);
         parcel.writeString(synopsis);
@@ -52,7 +56,7 @@ public class Movie implements Parcelable {
         parcel.writeString(posterUrl);
     }
 
-    public final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel sourceParcel) {
             return new Movie(sourceParcel);

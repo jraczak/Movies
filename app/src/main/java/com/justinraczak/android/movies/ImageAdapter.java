@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -17,8 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by justinr on 3/10/16.
@@ -26,22 +23,22 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    public int numberOfImages;
-    public ArrayList<String> mImageUrls;
+    public int numberOfMovies;
+    public ArrayList<Movie> mMoviesList;
 
-    public ImageAdapter(Context c, int count, ArrayList<String> urls) {
+    public ImageAdapter(Context c, int count, ArrayList<Movie> urls) {
         mContext = c;
-        numberOfImages = count;
-        mImageUrls = urls;
+        numberOfMovies = count;
+        mMoviesList = urls;
     }
 
     public int getCount() {
-        return mImageUrls.size();
+        return mMoviesList.size();
     }
 
     public Object getItem(int position) {
-        return mImageUrls.toArray()[position];
-        //return mImageUrls[position];
+        return mMoviesList.toArray()[position];
+        //return mMoviesList[position];
     }
 
     public long getItemId(int position) {
@@ -62,9 +59,9 @@ public class ImageAdapter extends BaseAdapter {
         else {
             imageView = (ImageView) convertView;
         }
-        Log.d("getView", "Url set length is " + this.mImageUrls.size());
+        Log.d("getView", "Url set length is " + this.mMoviesList.size());
 
-        String url = this.mImageUrls.get(position);
+        String url = this.mMoviesList.get(position).posterUrl;
         Log.d("getView", "Sending image at " + url + "to loader");
         new UrlImageLoader(url, imageView).execute();
 
