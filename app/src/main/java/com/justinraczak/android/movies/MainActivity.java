@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +61,7 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //TODO: Copy this image compression code out to a snippet
+                //TODO: Copy this image compression code out to a snippet for future use cases
                 // Grab the image that's displayed in the selected ImageView
                 //    Bitmap image = ((BitmapDrawable)((ImageView) view).getDrawable()).getBitmap();
                 //    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -84,8 +85,8 @@ public class MainActivity extends Activity {
                 //    intent.putExtra("poster_image_filename", fileName);
                 //    startActivity(intent);
 
-                //TODO: Remove this toast
-                Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
+                //TODO: Remove this debugging toast
+                //Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
 
                 Movie m = (Movie) mImageAdapter.getItem(position);
                 Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
@@ -112,7 +113,8 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -152,13 +154,10 @@ public class MainActivity extends Activity {
 
             for (int i=0; i < moviesArray.length(); i++) {
 
-                //TODO: Review the old loop after moving to objects
+                //TODO: Remove the old code when using image URLs only
                 //String posterUrl;
-
                 //JSONObject movieObject = moviesArray.getJSONObject(i);
-
                 //posterUrl = BASE_URL + IMAGE_SIZE + "/" + movieObject.getString(TMD_POSTER_PATH);
-
                 //posterUrlStrings[i] = posterUrl;
 
                 // New loop using Movie objects instead of a string array
@@ -171,6 +170,7 @@ public class MainActivity extends Activity {
                 String posterUrl = BASE_URL + IMAGE_SIZE + "/" + movieObject.getString(TMD_POSTER_PATH);
 
                 Movie movie = new Movie(id, title, releaseDate, synopsis, voteAverage, posterUrl);
+                movie.formatDateForDisplay();
 
                 moviesArrayList.add(movie);
             }
@@ -192,13 +192,17 @@ public class MainActivity extends Activity {
             String moviesJsonString = null;
             int numberOfPages = 1;
 
+            String sortPreference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .getString(getString(R.string.prefs_key_sort_order),
+                            getString(R.string.prefs_default_sort_order));
+
             try {
-                final String API_URL = "https://api.themoviedb.org/3/movie/popular?";
+                final String API_URL = "https://api.themoviedb.org/3/movie/" + sortPreference + "?";
                 final String PAGE_PARAM = "page";
                 final String API_PARAM = "api_key";
 
 
-                Uri builtUri = Uri.parse(API_URL).buildUpon()
+                Uri builtUri = Uri.parse(API_URL + sortPreference).buildUpon()
                         .appendQueryParameter(PAGE_PARAM, Integer.toString(numberOfPages))
                         .appendQueryParameter(API_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY)
                         .build();

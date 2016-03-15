@@ -1,6 +1,7 @@
 package com.justinraczak.android.movies;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -27,6 +28,7 @@ public class MovieDetail extends Activity {
             ImageView imageView = (ImageView) findViewById(R.id.movie_poster_image);
 
 
+        //TODO: Move this old retrieval code out into a snippet
         //    Bundle extras = getIntent().getExtras();
         //    String fileName = extras.getString("poster_image_filename");
 
@@ -37,7 +39,7 @@ public class MovieDetail extends Activity {
 
         //    imageView.setBackground(drawable);
 
-            Movie movie = (Movie) getIntent().getParcelableExtra("movie");
+            Movie movie = getIntent().getParcelableExtra("movie");
 
             imageView.setAdjustViewBounds(true);
             Picasso.with(this).load(movie.posterUrl).resize(185, 278).into(imageView);
@@ -45,9 +47,11 @@ public class MovieDetail extends Activity {
             TextView titleTextView = (TextView) findViewById(R.id.movie_title);
             TextView releaseDateTextView = (TextView) findViewById(R.id.movie_release_date);
             TextView synopsisTextView = (TextView) findViewById(R.id.movie_synopsis);
+            TextView voteAverageTextView = (TextView) findViewById(R.id.movie_vote_average);
 
             titleTextView.setText(movie.title);
-            releaseDateTextView.setText(movie.releaseDate);
+            releaseDateTextView.setText("Released " +movie.releaseDate);
+            voteAverageTextView.setText("Rated " + movie.voteAverage + " out of 10");
             synopsisTextView.setText(movie.synopsis);
 
         }
@@ -69,7 +73,8 @@ public class MovieDetail extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
