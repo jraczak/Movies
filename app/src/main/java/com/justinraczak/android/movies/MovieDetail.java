@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -395,6 +396,8 @@ public class MovieDetail extends Activity {
                         + "\n"
                         + '"' + review.content + '"';
 
+                CardView cardView = (CardView) getLayoutInflater().inflate(R.layout.card_movie_review, parentView, false);
+
                 TextView textView = (TextView) getLayoutInflater().inflate(R.layout.fragment_movie_review, parentView, false);
 
                 //TextView textView = new TextView(getApplicationContext());
@@ -406,7 +409,9 @@ public class MovieDetail extends Activity {
                 //params.setMargins(0, 8, 0, 0);
                 //textView.setLayoutParams(params);
 
-                parentView.addView(textView);
+                cardView.addView(textView);
+
+                parentView.addView(cardView);
             }
         }
     }
