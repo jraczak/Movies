@@ -1,0 +1,12 @@
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:text="Bounty hunters seek shelter from a raging blizzard and get caught up in a plot of betrayal and deception."
+    android:textColor="@color/icons"
+    android:background="@color/primary_dark"/>

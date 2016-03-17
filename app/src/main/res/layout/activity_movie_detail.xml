@@ -13,7 +13,7 @@
 
     <TextView android:id="@+id/movie_title"
         android:text="Test"
-        android:textSize="36dp"
+        android:textSize="24sp"
         android:textColor="@color/icons"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -48,15 +48,34 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/header_movie_release_date"
+                android:text="@string/header_movie_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/icons"
+                android:textSize="20sp"/>
+            <TextView
                 android:id="@+id/movie_release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:text="2015"
                 android:textColor="@color/icons"/>
+
+            <TextView
+                android:id="@+id/header_movie_vote_average"
+                android:text="@string/header_movie_vote_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/icons"
+                android:textSize="20sp"/>
             <TextView
                 android:id="@+id/movie_vote_average"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
                 android:text="Rated 5.4 out of 10"
                 android:textColor="@color/icons"/>
 
@@ -64,15 +83,50 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/movie_synopsis"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:paddingTop="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/header_movie_synopsis"
+        android:text="@string/header_movie_synopsis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/icons"
+        android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/movie_synopsis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Bounty hunters seek shelter from a raging blizzard and get caught up in a plot of betrayal and deception."
         android:textColor="@color/icons"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reviews_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="24dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/header_movie_reviews"
+            android:text="@string/header_movie_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/icons"
+            android:textSize="20sp"/>
+    </LinearLayout>
 
 </LinearLayout>
 </ScrollView>
