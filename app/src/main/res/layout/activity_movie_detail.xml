@@ -79,6 +79,19 @@
                 android:text="Rated 5.4 out of 10"
                 android:textColor="@color/icons"/>
 
+            <Button
+                android:id="@+id/favorite_movie_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:minHeight="48dp"
+                android:text="ADD TO FAVORITES"
+                android:background="@color/secondary_text"/>
+
         </LinearLayout>
 
     </LinearLayout>
