@@ -75,9 +75,9 @@ public class MovieDetail extends Activity {
                 @Override
                 public void onClick(View v) {
                     if (isFavorite(Integer.toString(mMovieId))) {
-                        removeMovieFromFavorites(Integer.toString(mMovieId), favoriteButton);
+                        removeMovieFromFavorites(Integer.toString(mMovieId), movie.title, favoriteButton);
                     } else {
-                        addMovieToFavorites(Integer.toString(movie.id), favoriteButton);
+                        addMovieToFavorites(Integer.toString(movie.id), movie.title, favoriteButton);
                     }
                 }
             });
@@ -446,7 +446,7 @@ public class MovieDetail extends Activity {
         }
     }
 
-    public void addMovieToFavorites(String id, Button button) {
+    public void addMovieToFavorites(String id, String movieName, Button button) {
         RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
         query.equalTo("movieId", id);
         RealmResults<FavoriteMovie> results = query.findAll();
@@ -465,19 +465,19 @@ public class MovieDetail extends Activity {
             realm.commitTransaction();
             realm.close();
 
-            Toast.makeText(getApplicationContext(), "Added movie to favorites", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), "Added " + movieName + " to favorites",
+                    Toast.LENGTH_LONG).show();
 
             button.setText("FAVORITED");
             button.setBackgroundColor(getResources().getColor(R.color.accent));
         }
         else {
-            Toast.makeText(getApplicationContext(), "Movie already favorited", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), movieName + " already favorited",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
-    public void removeMovieFromFavorites(String id, Button button) {
+    public void removeMovieFromFavorites(String id, String movieName, Button button) {
         realm.beginTransaction();
         RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
         query.equalTo("movieId", id);
@@ -489,8 +489,8 @@ public class MovieDetail extends Activity {
         button.setBackgroundColor(getResources().getColor(R.color.secondary_text));
         button.setText("ADD TO FAVORITES");
 
-        Toast.makeText(getApplicationContext(), "Movie removed from favorites", Toast.LENGTH_LONG)
-                .show();
+        Toast.makeText(getApplicationContext(), movieName + " removed from favorites",
+                Toast.LENGTH_LONG).show();
     }
 
     public boolean isFavorite(String id) {
