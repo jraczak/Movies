@@ -61,6 +61,8 @@ public class MovieListFragment extends Fragment {
         //textView.setText(R.string.hello_blank_fragment);
         //return textView;
 
+        Log.d(LOG_TAG, "Made it to onCreateView of MovieListFragment");
+
         View rootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         moviesList = new ArrayList<>();
