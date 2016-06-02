@@ -50,6 +50,13 @@ public class MovieDetail extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.movie_detail_container, new MovieDetailFragment())
+                            .commit();
+        }
+
+
         realm = Realm.getDefaultInstance();
 
         //TODO: Determine if movie is in favorites and update favorite button

@@ -1,26 +1,10 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/fragment_list_movies"
+    android:name="com.justinraczak.android.movies.MovieListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:context=".ListMoviesFragment"
+    tools:layout="@android:layout/list_movies" >
 
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/gridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:paddingTop="20dp"
-        android:columnWidth="120dp"
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        tools:context=".MainActivityFragment">
-
-    </GridView>
-
-</FrameLayout>
+</fragment>
