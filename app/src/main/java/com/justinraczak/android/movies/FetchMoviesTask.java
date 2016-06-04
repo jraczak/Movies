@@ -165,6 +165,10 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
+
+        if (imageAdapter == null) {
+            imageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
+        }
         return null;
     }
 
@@ -174,13 +178,14 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
         if (result != null) {
             moviesList.clear();
 
-            Log.d(LOG_TAG, "Pushing results to moviesList array list");
+            Log.d(LOG_TAG, "Pushing results to moviesList array list. Array size is " + result.size());
             for (Movie m: result) {
                 moviesList.add(m);
             }
 
+            Log.d(LOG_TAG, "Image adapter is: " + imageAdapter);
             Log.d(LOG_TAG, "Notifying adapter data set has changed");
-            imageAdapter.notifyDataSetChanged();
+            this.imageAdapter.notifyDataSetChanged();
         }
     }
 }

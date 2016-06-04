@@ -69,18 +69,26 @@ public class MovieListFragment extends Fragment {
 
         moviesList = new ArrayList<>();
 
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(getContext(), moviesList, mImageAdapter);
+        // Instantiate an ImageAdapter and pass it the context, number of movies, and array of movie objects
+        mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
+        Log.d(LOG_TAG, "Created image adapter: " + mImageAdapter);
+
+        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList, mImageAdapter);
         fetchMoviesTask.execute();
 
-        Log.d("onCreate", "ArrayList size is " + moviesList.size());
+        Log.d(LOG_TAG, "ArrayList size is " + moviesList.size());
 
         // Instantiate an ImageAdapter and pass it the context, number of movies, and array of movie objects
-        mImageAdapter = new ImageAdapter(getContext(), moviesList.size(), moviesList);
+        //mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
+        //Log.d(LOG_TAG, "Created image adapter: " + mImageAdapter);
+
         // Grab the GridView for displaying the images
-        GridView gridView = (GridView) getActivity().findViewById(R.id.gridview);
+        Log.d(LOG_TAG, "Looking for GridView");
+        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+        Log.d(LOG_TAG, "GridView is: " + gridView);
+
         // Attach the ImageAdapter to the GridView
-        Log.d(LOG_TAG, "GridView is: " + gridView.toString());
-        Log.d("onCreate", "Setting the adapter on the grid view");
+        Log.d(LOG_TAG, "Setting the adapter on the grid view");
         gridView.setAdapter(mImageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,9 +123,10 @@ public class MovieListFragment extends Fragment {
                 //Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
 
                 Movie m = (Movie) mImageAdapter.getItem(position);
-                Intent intent = new Intent(getContext(), MovieDetail.class);
+                Intent intent = new Intent(MoviesApplication.sContext, MovieDetail.class);
                 intent.putExtra("movie", m);
                 startActivity(intent);
+                Log.d(LOG_TAG, "Toast successfully created");
             }
         });
         return rootView;
