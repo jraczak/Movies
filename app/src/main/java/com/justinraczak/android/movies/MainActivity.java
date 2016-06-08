@@ -8,7 +8,8 @@ import android.view.MenuItem;
 
 import io.realm.Realm;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+implements MovieListFragment.OnMovieSelectedListener {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -123,6 +124,18 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onMovieSelected(Movie movie) {
+
+        MovieDetailFragment detailFragment = (MovieDetailFragment)
+                getFragmentManager().findFragmentById(R.id.movie_detail_container);
+
+        if (detailFragment != null) {
+            detailFragment.updateMovieDetails(movie);
+        }
+    }
+
+
 
     //public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 //

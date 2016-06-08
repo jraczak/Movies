@@ -1,7 +1,7 @@
 package com.justinraczak.android.movies;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 public class MovieListFragment extends Fragment {
 
     private final String LOG_TAG = MovieListFragment.class.getSimpleName();
+
+    OnMovieSelectedListener mCallback;
 
     private ImageAdapter mImageAdapter;
     private ArrayList<Movie> moviesList;
@@ -122,11 +124,12 @@ public class MovieListFragment extends Fragment {
                 //TODO: Remove this debugging toast
                 //Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
 
-                Movie m = (Movie) mImageAdapter.getItem(position);
-                Intent intent = new Intent(MoviesApplication.sContext, MovieDetail.class);
-                intent.putExtra("movie", m);
-                startActivity(intent);
-                Log.d(LOG_TAG, "Toast successfully created");
+                mCallback.onMovieSelected((Movie) mImageAdapter.getItem(position));
+
+                //Movie m = (Movie) mImageAdapter.getItem(position);
+                //Intent intent = new Intent(MoviesApplication.sContext, MovieDetail.class);
+                //intent.putExtra("movie", m);
+                //startActivity(intent);
             }
         });
         return rootView;
@@ -139,16 +142,26 @@ public class MovieListFragment extends Fragment {
     //    }
     //}
 //
-    //@Override
-    //public void onAttach(Context context) {
-    //    super.onAttach(context);
-    //    if (context instanceof MovieDetailFragment.OnFragmentInteractionListener) {
-    //        mListener = (MovieDetailFragment.OnFragmentInteractionListener) context;
-    //    } else {
-    //        throw new RuntimeException(context.toString()
-    //                + " must implement OnFragmentInteractionListener");
-    //    }
-    //}
+    public interface OnMovieSelectedListener {
+        public void onMovieSelected(Movie movie);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //if (context instanceof MovieDetailFragment.OnFragmentInteractionListener) {
+        //    mListener = (MovieDetailFragment.OnFragmentInteractionListener) context;
+        //} else {
+        //    throw new RuntimeException(context.toString()
+        //            + " must implement OnFragmentInteractionListener");
+        //}
+        try {
+            mCallback = (OnMovieSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMovieSelectedListener");
+        }
+    }
 //
     //@Override
     //public void onDetach() {

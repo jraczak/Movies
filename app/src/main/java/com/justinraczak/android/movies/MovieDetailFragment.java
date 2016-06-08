@@ -6,6 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -64,7 +69,12 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d(LOG_TAG, "Made it to onCreateView of MovieDetailFragment");
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        View containerView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+
+        TextView titleTextView = (TextView) containerView.findViewById(R.id.movie_title);
+        titleTextView.setText("SAMPLE TITLE");
+
+        return containerView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -73,6 +83,32 @@ public class MovieDetailFragment extends Fragment {
     //        mListener.onFragmentInteraction(uri);
     //    }
     //}
+
+    public void updateMovieDetails(Movie movie) {
+
+        Button favoriteButton = (Button) getActivity().findViewById(R.id.favorite_movie_button);
+        TextView titleTextView = (TextView) getActivity().findViewById(R.id.movie_title);
+        TextView releaseDateTextView = (TextView) getActivity().findViewById(R.id.movie_release_date);
+        TextView synopsisTextView = (TextView) getActivity().findViewById(R.id.movie_synopsis);
+        TextView voteAverageTextView = (TextView) getActivity().findViewById(R.id.movie_vote_average);
+        ImageView imageView = (ImageView) getActivity().findViewById(R.id.movie_poster_image);
+        Boolean favorite = movie.isFavorite();
+
+        titleTextView.setText(movie.title);
+        releaseDateTextView.setText(movie.releaseDate);
+        voteAverageTextView.setText(movie.voteAverage + " out of 10");
+        synopsisTextView.setText(movie.synopsis);
+        imageView.setAdjustViewBounds(true);
+        Picasso.with(getActivity()).load(movie.posterUrl).resize(185, 278).into(imageView);
+
+        if (favorite) {
+            Log.d(LOG_TAG, "Movie is a favorite");
+            favoriteButton.setText("FAVORITED");
+            favoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
+        }
+
+        //TODO: Get the favorite button wired up to add and remove favorites
+    }
 
 
 

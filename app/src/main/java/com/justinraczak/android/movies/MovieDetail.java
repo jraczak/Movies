@@ -70,9 +70,12 @@ public class MovieDetail extends Activity {
 
             // Get the favorite button
             final Button favoriteButton = (Button) findViewById(R.id.favorite_movie_button);
+            Log.d(LOG_TAG, "Favorite button found and is " + favoriteButton);
 
             // Update the button if the movie is already favorited
-            if (isFavorite(Integer.toString(mMovieId))) {
+            //if (isFavorite(Integer.toString(mMovieId))) {
+            if (movie.isFavorite()) {
+                Log.d(LOG_TAG, "Movie is a favorite");
                 favoriteButton.setText("FAVORITED");
                 favoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
             }
@@ -81,7 +84,8 @@ public class MovieDetail extends Activity {
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isFavorite(Integer.toString(mMovieId))) {
+                    //if (isFavorite(Integer.toString(mMovieId))) {
+                    if (movie.isFavorite()) {
                         removeMovieFromFavorites(Integer.toString(mMovieId), movie.title, favoriteButton);
                     } else {
                         addMovieToFavorites(Integer.toString(movie.id), movie.title, favoriteButton);
@@ -500,20 +504,20 @@ public class MovieDetail extends Activity {
                 Toast.LENGTH_LONG).show();
     }
 
-    public boolean isFavorite(String id) {
-        RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
-        query.equalTo("movieId", id);
-
-        Log.d(LOG_TAG, "Searching for favorite with id " + id);
-
-        RealmResults<FavoriteMovie> results = query.findAll();
-        Log.d(LOG_TAG, "Query returned " + results.size() + " results");
-
-        if (results.size() == 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
+    //public boolean isFavorite(String id) {
+    //    RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
+    //    query.equalTo("movieId", id);
+//
+    //    Log.d(LOG_TAG, "Searching for favorite with id " + id);
+//
+    //    RealmResults<FavoriteMovie> results = query.findAll();
+    //    Log.d(LOG_TAG, "Query returned " + results.size() + " results");
+//
+    //    if (results.size() == 0) {
+    //        return false;
+    //    }
+    //    else {
+    //        return true;
+    //    }
+    //}
 }

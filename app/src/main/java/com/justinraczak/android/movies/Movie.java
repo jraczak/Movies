@@ -11,6 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 /**
  * Created by justinr on 3/14/16.
  */
@@ -86,5 +90,23 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    public boolean isFavorite() {
+
+        RealmQuery<FavoriteMovie> query = Realm.getDefaultInstance().where(FavoriteMovie.class);
+        query.equalTo("movieId", Integer.toString(this.id));
+
+        Log.d("Movie Class", "Searching for favorite with id " + id);
+
+        RealmResults<FavoriteMovie> results = query.findAll();
+        Log.d("Movie Class", "Query returned " + results.size() + " results");
+
+        if (results.size() == 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
 }
