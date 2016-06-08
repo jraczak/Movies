@@ -148,15 +148,12 @@ public class MovieListFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        Log.d(LOG_TAG, "onAttach called");
         super.onAttach(context);
-        //if (context instanceof MovieDetailFragment.OnFragmentInteractionListener) {
-        //    mListener = (MovieDetailFragment.OnFragmentInteractionListener) context;
-        //} else {
-        //    throw new RuntimeException(context.toString()
-        //            + " must implement OnFragmentInteractionListener");
-        //}
+
         try {
             mCallback = (OnMovieSelectedListener) context;
+            Log.d(LOG_TAG, "Callback is " + mCallback);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnMovieSelectedListener");

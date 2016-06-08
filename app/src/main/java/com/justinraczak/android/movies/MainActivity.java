@@ -132,6 +132,10 @@ implements MovieListFragment.OnMovieSelectedListener {
 
         if (detailFragment != null) {
             detailFragment.updateMovieDetails(movie);
+        } else {
+                    Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
+                    intent.putExtra("movie", movie);
+                    startActivity(intent);
         }
     }
 
