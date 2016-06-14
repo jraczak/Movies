@@ -1,7 +1,7 @@
 package com.justinraczak.android.movies;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,15 +147,15 @@ public class MovieListFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity activity) {
         Log.d(LOG_TAG, "onAttach called");
-        super.onAttach(context);
+        super.onAttach(activity);
 
         try {
-            mCallback = (OnMovieSelectedListener) context;
+            mCallback = (OnMovieSelectedListener) activity;
             Log.d(LOG_TAG, "Callback is " + mCallback);
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
+            throw new ClassCastException(activity.toString()
                     + " must implement OnMovieSelectedListener");
         }
     }

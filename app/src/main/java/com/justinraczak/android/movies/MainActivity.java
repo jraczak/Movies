@@ -130,7 +130,7 @@ implements MovieListFragment.OnMovieSelectedListener {
         MovieDetailFragment detailFragment = (MovieDetailFragment)
                 getFragmentManager().findFragmentById(R.id.movie_detail_container);
 
-        if (detailFragment != null) {
+        if (mTwoPane) {
             detailFragment.updateMovieDetails(movie);
         } else {
                     Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
