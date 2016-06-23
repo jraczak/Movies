@@ -11,12 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +26,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 public class MovieDetail extends Activity {
 
@@ -57,67 +51,6 @@ public class MovieDetail extends Activity {
         }
 
 
-        realm = Realm.getDefaultInstance();
-
-        //TODO: Determine if movie is in favorites and update favorite button
-
-        if (this.getIntent() != null) {
-            ImageView imageView = (ImageView) findViewById(R.id.movie_poster_image);
-
-            final Movie movie = getIntent().getParcelableExtra("movie");
-
-            mMovieId = movie.id;
-
-            // Get the favorite button
-            final Button favoriteButton = (Button) findViewById(R.id.favorite_movie_button);
-            Log.d(LOG_TAG, "Favorite button found and is " + favoriteButton);
-
-            // Update the button if the movie is already favorited
-            //if (isFavorite(Integer.toString(mMovieId))) {
-            if (movie.isFavorite()) {
-                Log.d(LOG_TAG, "Movie is a favorite");
-                favoriteButton.setText("FAVORITED");
-                favoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
-            }
-
-            // Set up the click listener for the favorite button
-            favoriteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //if (isFavorite(Integer.toString(mMovieId))) {
-                    if (movie.isFavorite()) {
-                        removeMovieFromFavorites(Integer.toString(mMovieId), movie.title, favoriteButton);
-                    } else {
-                        addMovieToFavorites(Integer.toString(movie.id), movie.title, favoriteButton);
-                    }
-                }
-            });
-
-            imageView.setAdjustViewBounds(true);
-            Picasso.with(this).load(movie.posterUrl).resize(185, 278).into(imageView);
-
-            TextView titleTextView = (TextView) findViewById(R.id.movie_title);
-            TextView releaseDateTextView = (TextView) findViewById(R.id.movie_release_date);
-            TextView synopsisTextView = (TextView) findViewById(R.id.movie_synopsis);
-            TextView voteAverageTextView = (TextView) findViewById(R.id.movie_vote_average);
-
-            titleTextView.setText(movie.title);
-            releaseDateTextView.setText(movie.releaseDate);
-            voteAverageTextView.setText(movie.voteAverage + " out of 10");
-            synopsisTextView.setText(movie.synopsis);
-
-            Log.d("MovieDetail onCreate", "Attempting to fetch trailers");
-            FetchTrailersTask fetchTrailersTask = new FetchTrailersTask();
-            fetchTrailersTask.execute(movie);
-
-            Log.d("MovieDetail onCreate", "Attempting to fetch reviews");
-            FetchReviewsTask fetchReviewsTask = new FetchReviewsTask();
-            fetchReviewsTask.execute(movie);
-
-        }
-        else {
-            Toast.makeText(this, "Sorry, we couldn't load the movie.", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -455,53 +388,6 @@ public class MovieDetail extends Activity {
                 parentView.addView(cardView);
             }
         }
-    }
-
-    public void addMovieToFavorites(String id, String movieName, Button button) {
-        RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
-        query.equalTo("movieId", id);
-        RealmResults<FavoriteMovie> results = query.findAll();
-
-        if (results.size() == 0) {
-
-
-            realm.beginTransaction();
-
-            Log.d(LOG_TAG, "Begin creating favorite movie");
-            FavoriteMovie favoriteMovie = realm.createObject(FavoriteMovie.class);
-            Log.d(LOG_TAG, "Assign UUID and ID");
-            favoriteMovie.setId(UUID.randomUUID().toString());
-            favoriteMovie.setMovieId(id);
-
-            realm.commitTransaction();
-            realm.close();
-
-            Toast.makeText(getApplicationContext(), "Added " + movieName + " to favorites",
-                    Toast.LENGTH_LONG).show();
-
-            button.setText("FAVORITED");
-            button.setBackgroundColor(getResources().getColor(R.color.accent));
-        }
-        else {
-            Toast.makeText(getApplicationContext(), movieName + " already favorited",
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void removeMovieFromFavorites(String id, String movieName, Button button) {
-        realm.beginTransaction();
-        RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
-        query.equalTo("movieId", id);
-        RealmResults<FavoriteMovie> results = query.findAll();
-        FavoriteMovie favoriteMovie = results.get(0);
-        favoriteMovie.deleteFromRealm();
-        realm.commitTransaction();
-
-        button.setBackgroundColor(getResources().getColor(R.color.secondary_text));
-        button.setText("ADD TO FAVORITES");
-
-        Toast.makeText(getApplicationContext(), movieName + " removed from favorites",
-                Toast.LENGTH_LONG).show();
     }
 
     //public boolean isFavorite(String id) {

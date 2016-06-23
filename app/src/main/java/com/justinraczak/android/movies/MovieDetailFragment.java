@@ -9,8 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.UUID;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 
 /**
@@ -33,6 +40,9 @@ public class MovieDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private int movieId;
+    private Realm realm;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -72,8 +82,68 @@ public class MovieDetailFragment extends Fragment {
         Log.d(LOG_TAG, "Made it to onCreateView of MovieDetailFragment");
         View containerView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-        TextView titleTextView = (TextView) containerView.findViewById(R.id.movie_title);
-        titleTextView.setText("SAMPLE TITLE");
+        realm = Realm.getDefaultInstance();
+
+        //TODO: Determine if movie is in favorites and update favorite button
+
+        if (getActivity().getIntent() != null) {
+            ImageView imageView = (ImageView) containerView.findViewById(R.id.movie_poster_image);
+            Log.d(LOG_TAG, "ImageView is " + imageView);
+
+            final Movie movie = getActivity().getIntent().getParcelableExtra("movie");
+
+            movieId = movie.id;
+
+            // Get the favorite button
+            final Button favoriteButton = (Button) containerView.findViewById(R.id.favorite_movie_button);
+            Log.d(LOG_TAG, "Favorite button is " + favoriteButton);
+
+            // Update the button if the movie is already favorited
+            //if (isFavorite(Integer.toString(mMovieId))) {
+            if (movie.isFavorite()) {
+                Log.d(LOG_TAG, "Movie is a favorite");
+                favoriteButton.setText("FAVORITED");
+                favoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
+            }
+
+            // Set up the click listener for the favorite button
+            favoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //if (isFavorite(Integer.toString(mMovieId))) {
+                    if (movie.isFavorite()) {
+                        removeMovieFromFavorites(Integer.toString(movieId), movie.title, favoriteButton);
+                    } else {
+                        addMovieToFavorites(Integer.toString(movie.id), movie.title, favoriteButton);
+                    }
+                }
+            });
+
+            imageView.setAdjustViewBounds(true);
+            Picasso.with(getContext()).load(movie.posterUrl).resize(185, 278).into(imageView);
+
+            TextView titleTextView = (TextView) containerView.findViewById(R.id.movie_title);
+            TextView releaseDateTextView = (TextView) containerView.findViewById(R.id.movie_release_date);
+            TextView synopsisTextView = (TextView) containerView.findViewById(R.id.movie_synopsis);
+            TextView voteAverageTextView = (TextView) containerView.findViewById(R.id.movie_vote_average);
+
+            titleTextView.setText(movie.title);
+            releaseDateTextView.setText(movie.releaseDate);
+            voteAverageTextView.setText(movie.voteAverage + " out of 10");
+            synopsisTextView.setText(movie.synopsis);
+
+            Log.d("MovieDetail onCreate", "Attempting to fetch trailers");
+            MovieDetail.FetchTrailersTask fetchTrailersTask = new MovieDetail.FetchTrailersTask();
+            fetchTrailersTask.execute(movie);
+
+            Log.d("MovieDetail onCreate", "Attempting to fetch reviews");
+            MovieDetail.FetchReviewsTask fetchReviewsTask = new MovieDetail.FetchReviewsTask();
+            fetchReviewsTask.execute(movie);
+
+        }
+        else {
+            Toast.makeText(getContext(), "Sorry, we couldn't load the movie.", Toast.LENGTH_LONG).show();
+        }
 
         return containerView;
     }
@@ -109,6 +179,53 @@ public class MovieDetailFragment extends Fragment {
         }
 
         //TODO: Get the favorite button wired up to add and remove favorites
+    }
+
+    public void addMovieToFavorites(String id, String movieName, Button button) {
+        RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
+        query.equalTo("movieId", id);
+        RealmResults<FavoriteMovie> results = query.findAll();
+
+        if (results.size() == 0) {
+
+
+            realm.beginTransaction();
+
+            Log.d(LOG_TAG, "Begin creating favorite movie");
+            FavoriteMovie favoriteMovie = realm.createObject(FavoriteMovie.class);
+            Log.d(LOG_TAG, "Assign UUID and ID");
+            favoriteMovie.setId(UUID.randomUUID().toString());
+            favoriteMovie.setMovieId(id);
+
+            realm.commitTransaction();
+            realm.close();
+
+            Toast.makeText(getContext(), "Added " + movieName + " to favorites",
+                    Toast.LENGTH_LONG).show();
+
+            button.setText("FAVORITED");
+            button.setBackgroundColor(getResources().getColor(R.color.accent));
+        }
+        else {
+            Toast.makeText(getContext(), movieName + " already favorited",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void removeMovieFromFavorites(String id, String movieName, Button button) {
+        realm.beginTransaction();
+        RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
+        query.equalTo("movieId", id);
+        RealmResults<FavoriteMovie> results = query.findAll();
+        FavoriteMovie favoriteMovie = results.get(0);
+        favoriteMovie.deleteFromRealm();
+        realm.commitTransaction();
+
+        button.setBackgroundColor(getResources().getColor(R.color.secondary_text));
+        button.setText("ADD TO FAVORITES");
+
+        Toast.makeText(getContext(), movieName + " removed from favorites",
+                Toast.LENGTH_LONG).show();
     }
 
 
