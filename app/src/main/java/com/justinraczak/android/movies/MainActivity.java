@@ -9,12 +9,14 @@ import android.view.MenuItem;
 import io.realm.Realm;
 
 public class MainActivity extends Activity
-implements MovieListFragment.OnMovieSelectedListener {
+implements MovieListFragment.MovieCallbackInterface {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private boolean mTwoPane;
+    // To hold the first movie returned from the fetched collection
+    private Movie firstMovie;
 
     //TODO: See if these belong here or in the fragment class
     //private ImageAdapter mImageAdapter;
@@ -35,7 +37,7 @@ implements MovieListFragment.OnMovieSelectedListener {
             // the detail fragment
             if (savedInstanceState == null) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, new MovieDetailFragment()
+                        .replace(R.id.movie_detail_container, new MovieDetailFragment(firstMovie)
                         , DETAILFRAGMENT_TAG)
                         .commit();
             }
@@ -137,6 +139,10 @@ implements MovieListFragment.OnMovieSelectedListener {
                     intent.putExtra("movie", movie);
                     startActivity(intent);
         }
+    }
+
+    public void setFirstMovie(Movie movie) {
+        firstMovie = movie;
     }
 
 

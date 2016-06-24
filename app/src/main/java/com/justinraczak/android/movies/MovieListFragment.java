@@ -23,7 +23,7 @@ public class MovieListFragment extends Fragment {
 
     private final String LOG_TAG = MovieListFragment.class.getSimpleName();
 
-    OnMovieSelectedListener mCallback;
+    MovieCallbackInterface mCallback;
 
     private ImageAdapter mImageAdapter;
     private ArrayList<Movie> moviesList;
@@ -79,6 +79,10 @@ public class MovieListFragment extends Fragment {
         fetchMoviesTask.execute();
 
         Log.d(LOG_TAG, "ArrayList size is " + moviesList.size());
+
+        //TODO: Send the first movie to the callback
+        Log.d(LOG_TAG, "First movie in the collection is " + moviesList.get(0));
+        mCallback.setFirstMovie(moviesList.get(0));
 
         // Instantiate an ImageAdapter and pass it the context, number of movies, and array of movie objects
         //mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
@@ -142,8 +146,9 @@ public class MovieListFragment extends Fragment {
     //    }
     //}
 //
-    public interface OnMovieSelectedListener {
+    public interface MovieCallbackInterface {
         public void onMovieSelected(Movie movie);
+        public void setFirstMovie(Movie movie);
     }
 
     @Override
@@ -152,11 +157,11 @@ public class MovieListFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            mCallback = (OnMovieSelectedListener) activity;
+            mCallback = (MovieCallbackInterface) activity;
             Log.d(LOG_TAG, "Callback is " + mCallback);
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnMovieSelectedListener");
+                    + " must implement MovieCallbackInterface");
         }
     }
 //

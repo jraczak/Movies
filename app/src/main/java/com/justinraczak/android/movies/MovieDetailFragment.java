@@ -57,6 +57,7 @@ public class MovieDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private static Movie movie;
 
     private int movieId;
     private String mYouTubeVideoId;
@@ -78,10 +79,11 @@ public class MovieDetailFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static MovieDetailFragment newInstance() {
         MovieDetailFragment fragment = new MovieDetailFragment();
-        //Bundle args = new Bundle();
+        Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
-        //fragment.setArguments(args);
+        args.putParcelable("movie", movie);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -92,6 +94,7 @@ public class MovieDetailFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            movie = getArguments().getParcelable("movie");
         }
         parentActivity = getActivity();
     }
