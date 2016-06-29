@@ -75,14 +75,16 @@ public class MovieListFragment extends Fragment {
         mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
         Log.d(LOG_TAG, "Created image adapter: " + mImageAdapter);
 
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList, mImageAdapter);
+        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList,
+                mImageAdapter, mCallback);
         fetchMoviesTask.execute();
 
         Log.d(LOG_TAG, "ArrayList size is " + moviesList.size());
 
-        //TODO: Send the first movie to the callback
-        Log.d(LOG_TAG, "First movie in the collection is " + moviesList.get(0));
-        mCallback.setFirstMovie(moviesList.get(0));
+
+        //TODO: Remove this if this is successful in onPostExecute of fetch movies task
+        //Log.d(LOG_TAG, "First movie in the collection is " + moviesList.get(0));
+        //mCallback.setFirstMovie(moviesList.get(0));
 
         // Instantiate an ImageAdapter and pass it the context, number of movies, and array of movie objects
         //mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
@@ -128,6 +130,7 @@ public class MovieListFragment extends Fragment {
                 //TODO: Remove this debugging toast
                 //Toast.makeText(getApplicationContext(), "The item position is " + position, Toast.LENGTH_SHORT).show();
 
+                Log.d(LOG_TAG, "Tapped movie " + mImageAdapter.getItem(position));
                 mCallback.onMovieSelected((Movie) mImageAdapter.getItem(position));
 
                 //Movie m = (Movie) mImageAdapter.getItem(position);

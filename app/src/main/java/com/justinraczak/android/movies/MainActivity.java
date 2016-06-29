@@ -36,8 +36,9 @@ implements MovieListFragment.MovieCallbackInterface {
             // In two pane mode, show detail in this activity by adding
             // the detail fragment
             if (savedInstanceState == null) {
+                MovieDetailFragment fragment = MovieDetailFragment.newInstance(firstMovie);
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, new MovieDetailFragment(firstMovie)
+                        .replace(R.id.movie_detail_container, fragment
                         , DETAILFRAGMENT_TAG)
                         .commit();
             }

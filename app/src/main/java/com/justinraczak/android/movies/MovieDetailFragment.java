@@ -57,7 +57,7 @@ public class MovieDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private static Movie movie;
+    private Movie mMovie;
 
     private int movieId;
     private String mYouTubeVideoId;
@@ -77,12 +77,12 @@ public class MovieDetailFragment extends Fragment {
      * @return A new instance of fragment MovieDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MovieDetailFragment newInstance() {
+    public static MovieDetailFragment newInstance(Movie movie) {
         MovieDetailFragment fragment = new MovieDetailFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
-        args.putParcelable("movie", movie);
+        args.putParcelable("mMovie", movie);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,7 +94,7 @@ public class MovieDetailFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-            movie = getArguments().getParcelable("movie");
+            mMovie = getArguments().getParcelable("mMovie");
         }
         parentActivity = getActivity();
     }
@@ -108,7 +108,7 @@ public class MovieDetailFragment extends Fragment {
 
         realm = Realm.getDefaultInstance();
 
-        //TODO: Determine if movie is in favorites and update favorite button
+        //TODO: Determine if mMovie is in favorites and update favorite button
 
         Log.d(LOG_TAG, getActivity().getIntent().toString());
         if (getActivity().getIntent() != null) {
@@ -116,21 +116,23 @@ public class MovieDetailFragment extends Fragment {
             Log.d(LOG_TAG, "ImageView is " + imageView);
 
             //TODO: Figure out how to get the list of movies
-            if (savedInstanceState == null) {
-                parentActivity
 
-                final Movie movie = getActivity().getIntent().getParcelableExtra("movie");
-            }
+            //TODO: See if this conditional is needed anymore
+            //if (savedInstanceState == null) {
+            //    final Movie movie = this.mMovie;
+            //} else {
+            //        final Movie movie = getActivity().getIntent().getParcelableExtra("mMovie");
+            //    }
 
-            movieId = movie.id;
+            movieId = mMovie.id;
 
             // Get the favorite button
             final Button favoriteButton = (Button) containerView.findViewById(R.id.favorite_movie_button);
             Log.d(LOG_TAG, "Favorite button is " + favoriteButton);
 
-            // Update the button if the movie is already favorited
+            // Update the button if the mMovie is already favorited
             //if (isFavorite(Integer.toString(mMovieId))) {
-            if (movie.isFavorite()) {
+            if (mMovie.isFavorite()) {
                 Log.d(LOG_TAG, "Movie is a favorite");
                 favoriteButton.setText("FAVORITED");
                 favoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
@@ -141,38 +143,38 @@ public class MovieDetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //if (isFavorite(Integer.toString(mMovieId))) {
-                    if (movie.isFavorite()) {
-                        removeMovieFromFavorites(Integer.toString(movieId), movie.title, favoriteButton);
+                    if (mMovie.isFavorite()) {
+                        removeMovieFromFavorites(Integer.toString(movieId), mMovie.title, favoriteButton);
                     } else {
-                        addMovieToFavorites(Integer.toString(movie.id), movie.title, favoriteButton);
+                        addMovieToFavorites(Integer.toString(mMovie.id), mMovie.title, favoriteButton);
                     }
                 }
             });
 
             imageView.setAdjustViewBounds(true);
-            Picasso.with(getActivity()).load(movie.posterUrl).resize(185, 278).into(imageView);
+            Picasso.with(getActivity()).load(mMovie.posterUrl).resize(185, 278).into(imageView);
 
             TextView titleTextView = (TextView) containerView.findViewById(R.id.movie_title);
             TextView releaseDateTextView = (TextView) containerView.findViewById(R.id.movie_release_date);
             TextView synopsisTextView = (TextView) containerView.findViewById(R.id.movie_synopsis);
             TextView voteAverageTextView = (TextView) containerView.findViewById(R.id.movie_vote_average);
 
-            titleTextView.setText(movie.title);
-            releaseDateTextView.setText(movie.releaseDate);
-            voteAverageTextView.setText(movie.voteAverage + " out of 10");
-            synopsisTextView.setText(movie.synopsis);
+            titleTextView.setText(mMovie.title);
+            releaseDateTextView.setText(mMovie.releaseDate);
+            voteAverageTextView.setText(mMovie.voteAverage + " out of 10");
+            synopsisTextView.setText(mMovie.synopsis);
 
             Log.d("MovieDetail onCreate", "Attempting to fetch trailers");
             FetchTrailersTask fetchTrailersTask = new FetchTrailersTask();
-            fetchTrailersTask.execute(movie);
+            fetchTrailersTask.execute(mMovie);
 
             Log.d("MovieDetail onCreate", "Attempting to fetch reviews");
             FetchReviewsTask fetchReviewsTask = new FetchReviewsTask();
-            fetchReviewsTask.execute(movie);
+            fetchReviewsTask.execute(mMovie);
 
         }
         else {
-            Toast.makeText(getActivity(), "Sorry, we couldn't load the movie.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Sorry, we couldn't load the mMovie.", Toast.LENGTH_LONG).show();
         }
 
         return containerView;
@@ -221,7 +223,7 @@ public class MovieDetailFragment extends Fragment {
 
             realm.beginTransaction();
 
-            Log.d(LOG_TAG, "Begin creating favorite movie");
+            Log.d(LOG_TAG, "Begin creating favorite mMovie");
             FavoriteMovie favoriteMovie = realm.createObject(FavoriteMovie.class);
             Log.d(LOG_TAG, "Assign UUID and ID");
             favoriteMovie.setId(UUID.randomUUID().toString());
@@ -308,7 +310,7 @@ public class MovieDetailFragment extends Fragment {
     public class FetchTrailersTask extends AsyncTask<Movie, Void, String> {
         private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
 
-        final String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
+        final String API_BASE_URL = "https://api.themoviedb.org/3/mMovie/";
         final String API_VIDEOS_PARAM = "videos";
         final String API_KEY_PARAM = "api_key";
 
@@ -453,7 +455,7 @@ public class MovieDetailFragment extends Fragment {
                 String author = reviewObject.getString(TMD_AUTHOR);
                 String content = reviewObject.getString(TMD_CONTENT);
 
-                // Create the movie review object
+                // Create the mMovie review object
                 MovieReview review = new MovieReview(author, content);
 
                 // Add the review to the ArrayList
@@ -471,7 +473,7 @@ public class MovieDetailFragment extends Fragment {
             final String LOG_TAG = "FetchReviewsTask, doInBackground";
 
 
-            final String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
+            final String API_BASE_URL = "https://api.themoviedb.org/3/mMovie/";
             final String API_REVIEWS_PARAM = "reviews";
             final String API_KEY_PARAM = "api_key";
 

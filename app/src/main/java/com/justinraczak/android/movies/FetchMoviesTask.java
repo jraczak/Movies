@@ -29,11 +29,14 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
     private ArrayList<Movie> moviesList;
     private ImageAdapter imageAdapter;
     private Context context;
+    private MovieListFragment.MovieCallbackInterface updateCallback;
 
-    public FetchMoviesTask(Context context, ArrayList<Movie> moviesList, ImageAdapter imageAdapter) {
+    public FetchMoviesTask(Context context, ArrayList<Movie> moviesList, ImageAdapter imageAdapter
+    , MovieListFragment.MovieCallbackInterface callback) {
         this.moviesList = moviesList;
         this.imageAdapter = imageAdapter;
         this.context = context;
+        this.updateCallback = callback;
     }
 
     // Manipulate the retrieved JSON to traverse objects and pull poster URLs
@@ -186,6 +189,9 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
             Log.d(LOG_TAG, "Image adapter is: " + imageAdapter);
             Log.d(LOG_TAG, "Notifying adapter data set has changed");
             this.imageAdapter.notifyDataSetChanged();
+
+            Log.d(LOG_TAG, "First movie in the collection is " + moviesList.get(0));
+            this.updateCallback.setFirstMovie(moviesList.get(0));
         }
     }
 }

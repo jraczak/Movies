@@ -24,8 +24,9 @@ public class MovieDetail extends Activity {
         setContentView(R.layout.activity_movie_detail);
 
         if (savedInstanceState == null) {
+            MovieDetailFragment fragment = MovieDetailFragment.newInstance((Movie) getIntent().getParcelableExtra("movie"));
             getFragmentManager().beginTransaction()
-                    .add(R.id.movie_detail_container, new MovieDetailFragment())
+                    .add(R.id.movie_detail_container, fragment)
                             .commit();
         }
 
