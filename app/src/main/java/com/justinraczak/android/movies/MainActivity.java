@@ -3,6 +3,7 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,6 +37,7 @@ implements MovieListFragment.MovieCallbackInterface {
             // In two pane mode, show detail in this activity by adding
             // the detail fragment
             if (savedInstanceState == null) {
+                Log.d(LOG_TAG, "First movie is " + firstMovie);
                 MovieDetailFragment fragment = MovieDetailFragment.newInstance(firstMovie);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.movie_detail_container, fragment

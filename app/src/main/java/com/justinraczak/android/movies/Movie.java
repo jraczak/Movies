@@ -20,6 +20,54 @@ import io.realm.RealmResults;
  */
 public class Movie implements Parcelable {
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(String voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
     int id;
     String title;
     String releaseDate;
@@ -91,6 +139,8 @@ public class Movie implements Parcelable {
         }
     };
 
+
+
     public boolean isFavorite() {
 
         RealmQuery<FavoriteMovie> query = Realm.getDefaultInstance().where(FavoriteMovie.class);
@@ -108,5 +158,7 @@ public class Movie implements Parcelable {
             return true;
         }
     }
+
+    
 
 }

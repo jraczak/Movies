@@ -124,7 +124,7 @@ public class MovieDetailFragment extends Fragment {
             //        final Movie movie = getActivity().getIntent().getParcelableExtra("mMovie");
             //    }
 
-            movieId = mMovie.id;
+            movieId = mMovie.getId();
 
             // Get the favorite button
             final Button favoriteButton = (Button) containerView.findViewById(R.id.favorite_movie_button);
@@ -310,7 +310,7 @@ public class MovieDetailFragment extends Fragment {
     public class FetchTrailersTask extends AsyncTask<Movie, Void, String> {
         private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
 
-        final String API_BASE_URL = "https://api.themoviedb.org/3/mMovie/";
+        final String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
         final String API_VIDEOS_PARAM = "videos";
         final String API_KEY_PARAM = "api_key";
 
@@ -473,7 +473,7 @@ public class MovieDetailFragment extends Fragment {
             final String LOG_TAG = "FetchReviewsTask, doInBackground";
 
 
-            final String API_BASE_URL = "https://api.themoviedb.org/3/mMovie/";
+            final String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
             final String API_REVIEWS_PARAM = "reviews";
             final String API_KEY_PARAM = "api_key";
 
