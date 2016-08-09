@@ -3,7 +3,6 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +17,7 @@ implements MovieListFragment.MovieCallbackInterface {
     private boolean mTwoPane;
     // To hold the first movie returned from the fetched collection
     private Movie firstMovie;
+    private MovieDetailFragment detailFragment;
 
     //TODO: See if these belong here or in the fragment class
     //private ImageAdapter mImageAdapter;
@@ -36,14 +36,15 @@ implements MovieListFragment.MovieCallbackInterface {
 
             // In two pane mode, show detail in this activity by adding
             // the detail fragment
-            if (savedInstanceState == null) {
-                Log.d(LOG_TAG, "First movie is " + firstMovie);
-                MovieDetailFragment fragment = MovieDetailFragment.newInstance(firstMovie);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, fragment
-                        , DETAILFRAGMENT_TAG)
-                        .commit();
-            }
+            //TODO: Comment this out until trying it as a callback in MovieListFragment
+            //if (savedInstanceState == null) {
+            //    Log.d(LOG_TAG, "First movie is " + firstMovie);
+            //    MovieDetailFragment fragment = MovieDetailFragment.newInstance(firstMovie);
+            //    getFragmentManager().beginTransaction()
+            //            .replace(R.id.movie_detail_container, fragment
+            //            , DETAILFRAGMENT_TAG)
+            //            .commit();
+            //}
         }  else {
             mTwoPane = false;
         }
@@ -132,11 +133,16 @@ implements MovieListFragment.MovieCallbackInterface {
 
     public void onMovieSelected(Movie movie) {
 
-        MovieDetailFragment detailFragment = (MovieDetailFragment)
-                getFragmentManager().findFragmentById(R.id.movie_detail_container);
-
         if (mTwoPane) {
-            detailFragment.updateMovieDetails(movie);
+            if (detailFragment != null) {
+                detailFragment.updateMovieDetails(movie);
+            }
+            else {
+                detailFragment = MovieDetailFragment.newInstance(movie);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, detailFragment, DETAILFRAGMENT_TAG)
+                        .commit();
+            }
         } else {
                     Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
                     intent.putExtra("movie", movie);

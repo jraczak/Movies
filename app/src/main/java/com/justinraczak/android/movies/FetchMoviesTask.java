@@ -192,6 +192,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
             Log.d(LOG_TAG, "First movie in the collection is " + moviesList.get(0));
             this.updateCallback.setFirstMovie(moviesList.get(0));
+
         }
     }
 }
