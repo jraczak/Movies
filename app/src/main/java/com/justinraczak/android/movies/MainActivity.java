@@ -3,8 +3,14 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toolbar;
+
+import java.lang.reflect.Array;
 
 import io.realm.Realm;
 
@@ -111,7 +117,17 @@ implements MovieListFragment.MovieCallbackInterface {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        getMenuInflater().inflate(R.menu.sort_menu, menu);
+        //getMenuInflater().inflate(R.menu.sort_menu, menu);
+//
+        //MenuItem item = menu.findItem(R.id.sort_menu_item);
+        //Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+//
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        //        R.array.sort_order_menu_values, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+        //spinner.setAdapter(adapter);
+
         return true;
     }
 

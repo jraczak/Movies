@@ -29,6 +29,12 @@
         <item>top_rated</item>
     </string-array>
 
+    <string-array name="sort_order_menu_values">
+        <item>Popular</item>
+        <item>Top rated</item>
+        <item>Favorites</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

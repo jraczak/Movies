@@ -388,7 +388,7 @@ public class MovieDetailFragment extends Fragment {
             // super.onPostExecute(result);
 
             mYouTubeVideoId = result;
-            Button trailerButton = new Button(getContext());
+            Button trailerButton = new Button(getActivity());
             LinearLayout parentLayout = (LinearLayout) containerView.findViewById(R.id.movie_detail_linear_layout);
 
             // This wasn't really working, so see how it displays without it
@@ -397,8 +397,8 @@ public class MovieDetailFragment extends Fragment {
             //layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
 
             trailerButton.setText("WATCH THE TRAILER");
-            trailerButton.setTextColor(getContext().getResources().getColor(R.color.icons));
-            trailerButton.setBackgroundColor(getContext().getResources().getColor(R.color.accent));
+            trailerButton.setTextColor(getActivity().getResources().getColor(R.color.icons));
+            trailerButton.setBackgroundColor(getActivity().getResources().getColor(R.color.accent));
             trailerButton.setPadding(8, 0, 8, 0);
             trailerButton.setMinHeight(48);
             //trailerButton.setLayoutParams(layoutParams);
