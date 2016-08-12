@@ -4,26 +4,32 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.lang.reflect.Array;
 
 import io.realm.Realm;
 
-public class MainActivity extends Activity
+public class MainActivity extends AppCompatActivity
 implements MovieListFragment.MovieCallbackInterface {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private static final String LISTFRAGMENT_TAG = "LFTAG";
 
     private boolean mTwoPane;
     // To hold the first movie returned from the fetched collection
     private Movie firstMovie;
     private MovieDetailFragment detailFragment;
+    public static String sortPreference = "popular";
 
     //TODO: See if these belong here or in the fragment class
     //private ImageAdapter mImageAdapter;
@@ -34,6 +40,9 @@ implements MovieListFragment.MovieCallbackInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_with_sort_spinner);
+        setSupportActionBar(toolbar);
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // Detail pane is only present in large screen layouts
@@ -118,15 +127,31 @@ implements MovieListFragment.MovieCallbackInterface {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         //getMenuInflater().inflate(R.menu.sort_menu, menu);
-//
-        //MenuItem item = menu.findItem(R.id.sort_menu_item);
-        //Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-//
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-        //        R.array.sort_order_menu_values, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-        //spinner.setAdapter(adapter);
+
+        MenuItem item = menu.findItem(R.id.sort_menu_item);
+        Spinner spinner = (Spinner) findViewById(R.id.sort_spinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sort_order_menu_values, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Call out to a method to refresh the grid results
+                String clickedValue = parent.getItemAtPosition(position).toString();
+                Toast.makeText(MainActivity.this, clickedValue, Toast.LENGTH_SHORT).show();
+                //TODO: Create method to refresh results without reloading the activity
+                onSortOrderChanged(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return true;
     }
@@ -145,6 +170,16 @@ implements MovieListFragment.MovieCallbackInterface {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSortOrderChanged(String sortSelection) {
+        if (sortSelection.equals("Top rated")) {
+            this.sortPreference = "top_rated";
+        }
+        MovieListFragment listFragment = MovieListFragment.newInstance();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_list_movies, listFragment, LISTFRAGMENT_TAG)
+                .commit();
     }
 
     public void onMovieSelected(Movie movie) {

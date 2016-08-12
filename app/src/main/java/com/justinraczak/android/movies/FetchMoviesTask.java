@@ -30,13 +30,15 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
     private ImageAdapter imageAdapter;
     private Context context;
     private MovieListFragment.MovieCallbackInterface updateCallback;
+    private String sortOrder;
 
     public FetchMoviesTask(Context context, ArrayList<Movie> moviesList, ImageAdapter imageAdapter
-    , MovieListFragment.MovieCallbackInterface callback) {
+    , MovieListFragment.MovieCallbackInterface callback, String sortOrder) {
         this.moviesList = moviesList;
         this.imageAdapter = imageAdapter;
         this.context = context;
         this.updateCallback = callback;
+        this.sortOrder = sortOrder;
     }
 
     // Manipulate the retrieved JSON to traverse objects and pull poster URLs
@@ -107,9 +109,20 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
         String moviesJsonString = null;
         int numberOfPages = 1;
 
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
-        String sortPreference = sharedPreferences.getString("sort_order", "popular");
+
+        //TODO: Remove this shared prefs block if the new approach works
+        //SharedPreferences sharedPreferences =
+        //        PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
+        //String sortPreference = sharedPreferences.getString("sort_order", "popular");
+
+        String sortPreference;
+        if (this.sortOrder == null) {
+            sortPreference = "popular";
+            Log.d(LOG_TAG, "Sort preference is " + sortPreference);
+        } else {
+            sortPreference = this.sortOrder;
+            Log.d(LOG_TAG, "Sort preference is " + sortPreference);
+        }
 
         try {
             final String API_URL = "https://api.themoviedb.org/3/movie/" + sortPreference + "?";

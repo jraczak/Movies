@@ -76,7 +76,7 @@ public class MovieListFragment extends Fragment {
         Log.d(LOG_TAG, "Created image adapter: " + mImageAdapter);
 
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList,
-                mImageAdapter, mCallback);
+                mImageAdapter, mCallback, MainActivity.sortPreference);
         fetchMoviesTask.execute();
 
         Log.d(LOG_TAG, "ArrayList size is " + moviesList.size());
@@ -149,6 +149,10 @@ public class MovieListFragment extends Fragment {
     //    }
     //}
 //
+    public void updateMovieList(String sortPreference) {
+
+    }
+
     public interface MovieCallbackInterface {
         public void onMovieSelected(Movie movie);
         public void setFirstMovie(Movie movie);
