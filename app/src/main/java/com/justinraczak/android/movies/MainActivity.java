@@ -44,6 +44,11 @@ implements MovieListFragment.MovieCallbackInterface {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_with_sort_spinner);
         setSupportActionBar(toolbar);
 
+        MovieListFragment listFragment = MovieListFragment.newInstance();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
+                .commit();
+
         if (findViewById(R.id.movie_detail_container) != null) {
             // Detail pane is only present in large screen layouts
             // If its present, the activity should run in two pane mode

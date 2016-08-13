@@ -1,10 +1,10 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_list_movies"
-    android:name="com.justinraczak.android.movies.MovieListFragment"
+    android:id="@+id/movie_list_container"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListMoviesFragment"
     tools:layout="@android:layout/list_movies" >
 
-</fragment>
+</FrameLayout>
