@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,10 +42,14 @@ implements MovieListFragment.MovieCallbackInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(LOG_TAG, "Instantiating the toolbar");
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_with_sort_spinner);
+        Log.d(LOG_TAG, "Setting the toolbar");
         setSupportActionBar(toolbar);
 
+        Log.d(LOG_TAG, "Creating the movie list fragment");
         MovieListFragment listFragment = MovieListFragment.newInstance();
+        Log.d(LOG_TAG, "Inserting fragment" + listFragment.toString() + "into container");
         getFragmentManager().beginTransaction()
                 .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
                 .commit();
