@@ -49,7 +49,7 @@ implements MovieListFragment.MovieCallbackInterface {
 
         Log.d(LOG_TAG, "Creating the movie list fragment");
         MovieListFragment listFragment = MovieListFragment.newInstance();
-        Log.d(LOG_TAG, "Inserting fragment" + listFragment.toString() + "into container");
+        Log.d(LOG_TAG, "Inserting fragment " + listFragment.toString() + " into container");
         getFragmentManager().beginTransaction()
                 .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
                 .commit();
