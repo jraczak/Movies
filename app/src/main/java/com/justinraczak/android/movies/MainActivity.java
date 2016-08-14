@@ -188,7 +188,7 @@ implements MovieListFragment.MovieCallbackInterface {
         }
         MovieListFragment listFragment = MovieListFragment.newInstance();
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_list_movies, listFragment, LISTFRAGMENT_TAG)
+                .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
                 .commit();
     }
 
