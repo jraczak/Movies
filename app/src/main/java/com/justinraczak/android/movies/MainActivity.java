@@ -185,6 +185,8 @@ implements MovieListFragment.MovieCallbackInterface {
     public void onSortOrderChanged(String sortSelection) {
         if (sortSelection.equals("Top rated")) {
             this.sortPreference = "top_rated";
+
+            //TODO: Handle the other sort order cases
         }
         MovieListFragment listFragment = MovieListFragment.newInstance();
         getFragmentManager().beginTransaction()
