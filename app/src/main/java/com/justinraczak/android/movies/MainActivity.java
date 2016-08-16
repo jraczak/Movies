@@ -42,7 +42,7 @@ implements MovieListFragment.MovieCallbackInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d(LOG_TAG, "Instantiating the toolbar");
+        Log.d(LOG_TAG, "Instantiating the toolbar with sort spinner");
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_with_sort_spinner);
         Log.d(LOG_TAG, "Setting the toolbar");
         setSupportActionBar(toolbar);
@@ -151,8 +151,6 @@ implements MovieListFragment.MovieCallbackInterface {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //TODO: Call out to a method to refresh the grid results
-                String clickedValue = parent.getItemAtPosition(position).toString();
-                Toast.makeText(MainActivity.this, clickedValue, Toast.LENGTH_SHORT).show();
                 //TODO: Create method to refresh results without reloading the activity
                 onSortOrderChanged(parent.getItemAtPosition(position).toString());
             }
@@ -183,15 +181,24 @@ implements MovieListFragment.MovieCallbackInterface {
     }
 
     public void onSortOrderChanged(String sortSelection) {
-        if (sortSelection.equals("Top rated")) {
-            this.sortPreference = "top_rated";
 
-            //TODO: Handle the other sort order cases
+        switch (sortSelection) {
+            case "Top rated":
+                this.sortPreference = "top_rated";
+                break;
+            case "Popular":
+                this.sortPreference = "popular";
+                break;
+            case "Favorite":
+                this.sortPreference = "favorite";
+                break;
         }
+            //TODO: Handle the other sort order cases
         MovieListFragment listFragment = MovieListFragment.newInstance();
         getFragmentManager().beginTransaction()
                 .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
                 .commit();
+        Toast.makeText(MainActivity.this, sortSelection + " movies loaded", Toast.LENGTH_LONG).show();
     }
 
     public void onMovieSelected(Movie movie) {

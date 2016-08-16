@@ -94,7 +94,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
         //for (String s: posterUrlStrings) {
         for (Movie m: moviesArrayList) {
-            Log.d(LOG_TAG, "Built movie: " + m.title);
+            Log.d(LOG_TAG, "Built movie: " + m.title + " with ID " + m.id);
         }
         //TODO: Remove this old return statement
         //return posterUrlStrings;

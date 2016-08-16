@@ -12,6 +12,10 @@ import android.widget.GridView;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 /**
  * A simple {@link Fragment} subclass.
  interface
@@ -27,6 +31,7 @@ public class MovieListFragment extends Fragment {
 
     private ImageAdapter mImageAdapter;
     private ArrayList<Movie> moviesList;
+    private Realm realm;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -63,6 +68,8 @@ public class MovieListFragment extends Fragment {
         //textView.setText(R.string.hello_blank_fragment);
         //return textView;
 
+        realm = Realm.getDefaultInstance();
+
         Log.d(LOG_TAG, "Made it to onCreateView of MovieListFragment");
 
         View rootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
@@ -75,10 +82,18 @@ public class MovieListFragment extends Fragment {
         mImageAdapter = new ImageAdapter(MoviesApplication.sContext, moviesList.size(), moviesList);
         Log.d(LOG_TAG, "Created image adapter: " + mImageAdapter);
 
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList,
-                mImageAdapter, mCallback, MainActivity.sortPreference);
-        fetchMoviesTask.execute();
-
+        if (MainActivity.sortPreference.equals("favorite")) {
+            Log.d(LOG_TAG, "Sort preference is favorite - fetching local favorites");
+            //TODO: Query all the favorites and pass them to be converted
+            RealmQuery<FavoriteMovie> favoriteMovieRealmQuery = realm.where(FavoriteMovie.class);
+            RealmResults<FavoriteMovie> favoriteMovies = favoriteMovieRealmQuery.findAll();
+            convertFavoritesToMovies(favoriteMovies);
+        } else {
+            Log.d(LOG_TAG, "Fetching movies from web database");
+            FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(MoviesApplication.sContext, moviesList,
+                    mImageAdapter, mCallback, MainActivity.sortPreference);
+            fetchMoviesTask.execute();
+        }
         Log.d(LOG_TAG, "ArrayList size is " + moviesList.size());
 
 
@@ -151,6 +166,13 @@ public class MovieListFragment extends Fragment {
 //
     public void updateMovieList(String sortPreference) {
 
+    }
+
+    public void convertFavoritesToMovies(RealmResults<FavoriteMovie> favorites) {
+        for (FavoriteMovie favorite: favorites) {
+            Movie movie = favorite.convertFavoriteToMovie();
+            moviesList.add(movie);
+        }
     }
 
     public interface MovieCallbackInterface {

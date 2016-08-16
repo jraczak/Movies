@@ -1,9 +1,22 @@
-<FrameLayout
-    android:id="@+id/movie_detail_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.justinraczak.android.movies.MovieDetail"
-    android:background="@color/primary_text"
-    tools:ignore="MergeRootFrame"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:id="@+id/movie_detail_toolbar"/>
+
+    <FrameLayout
+        android:id="@+id/movie_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context="com.justinraczak.android.movies.MovieDetail"
+        android:background="@color/primary_text"
+        tools:ignore="MergeRootFrame"/>
+</LinearLayout>
+

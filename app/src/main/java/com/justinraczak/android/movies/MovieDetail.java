@@ -3,12 +3,15 @@ package com.justinraczak.android.movies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import io.realm.Realm;
 
-public class MovieDetail extends Activity {
+public class MovieDetail extends AppCompatActivity {
 
     private final String LOG_TAG = MovieDetail.class.getSimpleName();
 
@@ -22,6 +25,10 @@ public class MovieDetail extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.movie_detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             MovieDetailFragment fragment = MovieDetailFragment.newInstance((Movie) getIntent().getParcelableExtra("movie"));

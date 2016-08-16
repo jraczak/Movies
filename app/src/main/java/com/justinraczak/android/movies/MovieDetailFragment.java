@@ -146,7 +146,7 @@ public class MovieDetailFragment extends Fragment {
                     if (mMovie.isFavorite()) {
                         removeMovieFromFavorites(Integer.toString(movieId), mMovie.title, favoriteButton);
                     } else {
-                        addMovieToFavorites(Integer.toString(mMovie.id), mMovie.title, favoriteButton);
+                        addMovieToFavorites(Integer.toString(mMovie.id), mMovie.title, favoriteButton, mMovie);
                     }
                 }
             });
@@ -213,7 +213,7 @@ public class MovieDetailFragment extends Fragment {
         //TODO: Get the favorite button wired up to add and remove favorites
     }
 
-    public void addMovieToFavorites(String id, String movieName, Button button) {
+    public void addMovieToFavorites(String id, String movieName, Button button, Movie movie) {
         RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
         query.equalTo("movieId", id);
         RealmResults<FavoriteMovie> results = query.findAll();
@@ -223,11 +223,19 @@ public class MovieDetailFragment extends Fragment {
 
             realm.beginTransaction();
 
+            //TODO: Improve the constructor to take a movie object and build the favorite there
             Log.d(LOG_TAG, "Begin creating favorite mMovie");
             FavoriteMovie favoriteMovie = realm.createObject(FavoriteMovie.class);
             Log.d(LOG_TAG, "Assign UUID and ID");
             favoriteMovie.setId(UUID.randomUUID().toString());
+            // Copy all the values to a local object so we don't have to look them up to show favorites
+            Log.d(LOG_TAG, "Copying all values to local favorite");
             favoriteMovie.setMovieId(id);
+            favoriteMovie.setTitle(movie.title);
+            favoriteMovie.setReleaseDate(movie.releaseDate);
+            favoriteMovie.setVoteAverage(movie.voteAverage);
+            favoriteMovie.setSynopsis(movie.synopsis);
+            favoriteMovie.setPosterUrl(movie.posterUrl);
 
             realm.commitTransaction();
             realm.close();
