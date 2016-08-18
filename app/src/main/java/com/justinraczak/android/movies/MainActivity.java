@@ -198,7 +198,7 @@ implements MovieListFragment.MovieCallbackInterface {
         getFragmentManager().beginTransaction()
                 .replace(R.id.movie_list_container, listFragment, LISTFRAGMENT_TAG)
                 .commit();
-        Toast.makeText(MainActivity.this, sortSelection + " movies loaded", Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, sortSelection + " movies loaded", Toast.LENGTH_LONG).show();
     }
 
     public void onMovieSelected(Movie movie) {
@@ -225,7 +225,7 @@ implements MovieListFragment.MovieCallbackInterface {
     }
 
 
-
+    //TODO: Remove this after successfully implementing in a separate class
     //public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 //
     //    private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
