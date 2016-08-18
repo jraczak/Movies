@@ -1,77 +1,22 @@
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.justinraczak.android.movies.MovieDetail"
-    android:background="@color/primary_text">
-
-
-<LinearLayout  android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView android:id="@+id/movie_title"
-        android:text="Test"
-        android:textSize="36dp"
-        android:textColor="@color/icons"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        android:background="@color/primary"
+    <android.support.v7.widget.Toolbar
+        android:layout_height="?android:attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/movie_detail_toolbar"/>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/movie_detail_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
 
-        <ImageView
-            android:id="@+id/movie_poster_image"
-            android:src="@drawable/imgres"
-            android:contentDescription="@string/description_movie_poster_image"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/movie_release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2015"
-                android:textColor="@color/icons"/>
-            <TextView
-                android:id="@+id/movie_vote_average"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rated 5.4 out of 10"
-                android:textColor="@color/icons"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/movie_synopsis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Bounty hunters seek shelter from a raging blizzard and get caught up in a plot of betrayal and deception."
-        android:textColor="@color/icons"/>
-
+        tools:context="com.justinraczak.android.movies.MovieDetail"
+        android:background="@color/primary_text"
+        tools:ignore="MergeRootFrame"/>
 </LinearLayout>
-</ScrollView>
+

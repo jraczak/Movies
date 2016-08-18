@@ -62,7 +62,7 @@ public class ImageAdapter extends BaseAdapter {
         Log.d("getView", "Url set length is " + this.mMoviesList.size());
 
         String url = this.mMoviesList.get(position).posterUrl;
-        Log.d("getView", "Sending image at " + url + "to loader");
+        Log.d("getView", "Sending image at " + url + " to loader");
         new UrlImageLoader(url, imageView).execute();
 
         return imageView;

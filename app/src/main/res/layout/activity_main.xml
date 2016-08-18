@@ -1,26 +1,31 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" >
+    android:orientation="vertical">
 
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/gridview"
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar_with_sort_spinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:paddingTop="20dp"
-        android:columnWidth="120dp"
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        tools:context=".MainActivityFragment">
+        android:layout_height="?android:attr/actionBarSize">
 
-    </GridView>
+        <Spinner
+            android:id="@+id/sort_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"/>
+
+    </android.support.v7.widget.Toolbar>
+
+<FrameLayout
+    android:id="@+id/movie_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListMoviesFragment"
+    tools:layout="@android:layout/list_movies" >
 
 </FrameLayout>
+
+</LinearLayout>

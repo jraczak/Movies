@@ -2,65 +2,48 @@ package com.justinraczak.android.movies;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import io.realm.Realm;
 
-import java.io.File;
+public class MovieDetail extends AppCompatActivity {
 
-public class MovieDetail extends Activity {
+    private final String LOG_TAG = MovieDetail.class.getSimpleName();
+
+    private String mYouTubeVideoId;
+    private int mMovieId;
+    private Realm realm;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        if (this.getIntent() != null) {
-            ImageView imageView = (ImageView) findViewById(R.id.movie_poster_image);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.movie_detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        //TODO: Move this old retrieval code out into a snippet
-        //    Bundle extras = getIntent().getExtras();
-        //    String fileName = extras.getString("poster_image_filename");
-
-
-        //    File filePath = getFileStreamPath(fileName);
-        //    Drawable drawable = Drawable.createFromPath(filePath.toString());
-
-
-        //    imageView.setBackground(drawable);
-
-            Movie movie = getIntent().getParcelableExtra("movie");
-
-            imageView.setAdjustViewBounds(true);
-            Picasso.with(this).load(movie.posterUrl).resize(185, 278).into(imageView);
-
-            TextView titleTextView = (TextView) findViewById(R.id.movie_title);
-            TextView releaseDateTextView = (TextView) findViewById(R.id.movie_release_date);
-            TextView synopsisTextView = (TextView) findViewById(R.id.movie_synopsis);
-            TextView voteAverageTextView = (TextView) findViewById(R.id.movie_vote_average);
-
-            titleTextView.setText(movie.title);
-            releaseDateTextView.setText("Released " +movie.releaseDate);
-            voteAverageTextView.setText("Rated " + movie.voteAverage + " out of 10");
-            synopsisTextView.setText(movie.synopsis);
-
+        if (savedInstanceState == null) {
+            MovieDetailFragment fragment = MovieDetailFragment.newInstance((Movie) getIntent().getParcelableExtra("movie"));
+            getFragmentManager().beginTransaction()
+                    .add(R.id.movie_detail_container, fragment)
+                            .commit();
         }
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
+        //getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
         return true;
     }
 
@@ -79,4 +62,23 @@ public class MovieDetail extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    //public boolean isFavorite(String id) {
+    //    RealmQuery<FavoriteMovie> query = realm.where(FavoriteMovie.class);
+    //    query.equalTo("movieId", id);
+//
+    //    Log.d(LOG_TAG, "Searching for favorite with id " + id);
+//
+    //    RealmResults<FavoriteMovie> results = query.findAll();
+    //    Log.d(LOG_TAG, "Query returned " + results.size() + " results");
+//
+    //    if (results.size() == 0) {
+    //        return false;
+    //    }
+    //    else {
+    //        return true;
+    //    }
+    //}
 }
