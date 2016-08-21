@@ -384,7 +384,8 @@ implements MovieListFragment.MovieCallbackInterface {
         super.onResume();
 
         //TODO: Have to assign the fragment to a variable here. Need fragment first
-        MovieListFragment movieListFragment = (MovieListFragment) getFragmentManager()
-                .findFragmentById(R.id.fragment_list_movies);
+        //TODO: Figure out why I had this in the first place if I don't use the variable...
+        //MovieListFragment movieListFragment = (MovieListFragment) getFragmentManager()
+        //        .findFragmentById(R.id.fragment_list_movies);
     }
 }
