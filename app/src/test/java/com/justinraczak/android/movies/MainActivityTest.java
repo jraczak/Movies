@@ -4,6 +4,8 @@ package com.justinraczak.android.movies;
  * Created by justinr on 8/26/16.
  */
 
+import android.widget.GridView;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,14 +62,27 @@ public class MainActivityTest {
     }
 
     @Test
-    public void clickFirstMovie() {
+    public void checkFirstMovieTitle() {
         driver.label("Tap first movie test");
-        MobileElement firstMoviePoster = (MobileElement) driver.findElement
-                (By.xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.ImageView[1]"));
+        MobileElement firstMoviePoster;
+        //MobileElement gridView = (MobileElement) driver.findElement
+                //(By.xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.ImageView[1]"));
+                        //(By.id("com.justinraczak.android.movies:id/gridview"));
+        if ( driver.findElement(By.id("com.justinraczak.android.movies:id/movie_detail_container")) != null) {
+            firstMoviePoster = (MobileElement) driver.findElement(
+                    By.xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.ImageView[1]")
+            );
+        } else {
+            firstMoviePoster = (MobileElement) driver.findElement(
+                    By.xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.ImageView[1]")
+            );
+        }
         firstMoviePoster.click();
         driver.getScreenshotAs(OutputType.FILE);
-        MobileElement movieTitleTextField = (MobileElement) driver.findElementById("com.justinraczak.android.movies:id/movie_title");
-        assertEquals("Suicide Squad", movieTitleTextField.getText());
+        MobileElement movieTitle = (MobileElement) driver.findElement(
+                By.id("com.justinraczak.android.movies:id/movie_title"));
+        assertEquals("Suicide Squad", movieTitle.getText());
+        driver.label("Verified movie title");
     }
 
     @After
