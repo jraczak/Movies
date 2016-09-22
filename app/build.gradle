@@ -25,10 +25,11 @@ android {
 
 repositories {
     mavenCentral()
-    maven{
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
 }
+
+//repositories {
+//    mavenLocal()
+//}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,7 +42,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'io.appium:java-client:4.1.1'
-    testCompile 'com.xamarin.testcloud:appium:1.0-SNAPSHOT'
+    testCompile 'com.xamarin.testcloud:appium:1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -69,19 +70,6 @@ task createPom {
             withXml {
                 def projectNode = asNode()
                 projectNode.append(new XmlParser().parse('https://gist.githubusercontent.com/skovsboll/7b74277d1997d3357142d14ed41c2116/raw/a8dbdd201a693fed8f9528b1d53b7e9b06dd9cc6/gistfile1.txt'))
-            }
-
-            repositories {
-                repository {
-                    id 'snapshots-repo'
-                    url 'https://oss.sonatype.org/content/repositories/snapshots'
-                    releases {
-                        enabled false
-                    }
-                    snapshots {
-                        enabled true
-                    }
-                }
             }
         }
     }.writeTo("pom.xml")
